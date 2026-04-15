@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>AP Psych Quiz Game</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<h1>AP Psych Mystery Quiz</h1>
+
+<div id="teams">
+  <button onclick="setTeam(0)">Team 1</button>
+  <button onclick="setTeam(1)">Team 2</button>
+  <button onclick="setTeam(2)">Team 3</button>
+</div>
+
+<h2 id="currentTeam">Current: Team 1</h2>
+
+<div id="board"></div>
+
+<div id="questionBox" class="hidden">
+  <h3 id="questionText"></h3>
+  <button onclick="answer(true)">Correct</button>
+  <button onclick="answer(false)">Wrong</button>
+</div>
+
+<div id="decisionBox" class="hidden">
+  <p>Keep or give?</p>
+  <button onclick="resolveBox('keep')">Keep</button>
+  <button onclick="resolveBox('give')">Give</button>
+</div>
+
+<div id="scores"></div>
+
+<script src="script.js"></script>
+</body>
+</html>
