@@ -1,11 +1,6 @@
 const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
 
-let teams = [
-  { name: "Team 1", score: 0 },
-  { name: "Team 2", score: 0 },
-  { name: "Team 3", score: 0 }
-];
-
+let teams = [];
 let currentTeam = 0;
 let currentLetter = null;
 
@@ -16,6 +11,40 @@ const questions = {
   C: "What is the amygdala responsible for?"
 };
 
+// 🔧 SETUP TEAMS
+function setupTeams() {
+  let num = prompt("How many teams?");
+  num = parseInt(num);
+
+  for (let i = 0; i < num; i++) {
+    let name = prompt(`Enter name for Team ${i + 1}`);
+    teams.push({ name: name || `Team ${i + 1}`, score: 0 });
+  }
+
+  renderTeamButtons();
+  updateScores();
+}
+
+// 🎯 TEAM BUTTONS
+function renderTeamButtons() {
+  const div = document.getElementById("teams");
+  div.innerHTML = "";
+
+  teams.forEach((team, index) => {
+    const btn = document.createElement("button");
+    btn.innerText = team.name;
+    btn.onclick = () => setTeam(index);
+    div.appendChild(btn);
+  });
+}
+
+function setTeam(index) {
+  currentTeam = index;
+  document.getElementById("currentTeam").innerText =
+    "Current: " + teams[index].name;
+}
+
+// 🧩 BOARD
 function initBoard() {
   const board = document.getElementById("board");
 
@@ -26,18 +55,12 @@ function initBoard() {
     div.onclick = () => openQuestion(letter, div);
     board.appendChild(div);
   });
-
-  updateScores();
 }
 
-function setTeam(index) {
-  currentTeam = index;
-  document.getElementById("currentTeam").innerText =
-    "Current: " + teams[index].name;
-}
-
+// ❓ QUESTION
 function openQuestion(letter, element) {
   currentLetter = letter;
+
   document.getElementById("questionText").innerText =
     questions[letter] || "No question yet";
 
@@ -53,21 +76,36 @@ function answer(correct) {
   }
 }
 
+// 🤝 DECISION
 function resolveBox(choice) {
   document.getElementById("decisionBox").classList.add("hidden");
 
-  let effect = getRandomEffect();
-
   if (choice === "give") {
-    let target = prompt("Give to which team? (0,1,2)");
-    applyEffect(effect, parseInt(target));
+    showGiveOptions();
   } else {
-    applyEffect(effect, currentTeam);
+    applyEffect(getRandomEffect(), currentTeam);
   }
-
-  updateScores();
 }
 
+// 👀 VISUAL TEAM SELECTOR
+function showGiveOptions() {
+  const box = document.getElementById("giveBox");
+  box.innerHTML = "<p>Give to which team?</p>";
+
+  teams.forEach((team, index) => {
+    const btn = document.createElement("button");
+    btn.innerText = team.name;
+    btn.onclick = () => {
+      box.classList.add("hidden");
+      applyEffect(getRandomEffect(), index);
+    };
+    box.appendChild(btn);
+  });
+
+  box.classList.remove("hidden");
+}
+
+// 🎲 EFFECTS
 function getRandomEffect() {
   const effects = [
     { type: "add", value: 10 },
@@ -100,9 +138,11 @@ function applyEffect(effect, teamIndex) {
     teams.forEach(t => t.score += effect.value);
   }
 
-  alert("Effect: " + effect.type + " " + effect.value);
+  alert(`Effect: ${effect.type} ${effect.value}`);
+  updateScores();
 }
 
+// 📊 SCORES
 function updateScores() {
   const div = document.getElementById("scores");
   div.innerHTML = teams
@@ -110,4 +150,6 @@ function updateScores() {
     .join("<br>");
 }
 
+// 🚀 INIT
+setupTeams();
 initBoard();
