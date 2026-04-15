@@ -1,0 +1,27 @@
+body {
+  font-family: Arial;
+  text-align: center;
+}
+
+#board {
+  display: grid;
+  grid-template-columns: repeat(7, 60px);
+  gap: 10px;
+  justify-content: center;
+  margin: 20px;
+}
+
+.box {
+  width: 60px;
+  height: 60px;
+  background: lightblue;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.hidden {
+  display: none;
+}
